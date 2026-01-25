@@ -371,55 +371,57 @@
                     <text x="500" y="260" text-anchor="middle" font-size="10" fill="#555">Own factors</text>
                     <text x="500" y="275" text-anchor="middle" font-size="10" fill="#555">Consume goods</text>
 
-                    <!-- OUTER FLOWS (Green - Real flows of goods/services/factors) -->
+                    <!-- OUTER FLOWS (Red - Real flows of goods/services/factors) -->
                     <!-- Top left: Goods sold (Firms to Market) -->
-                    <path class="flow-arrow" data-info="goods-sold" d="M 100 200 Q 100 70, 170 70" fill="none" stroke="#27ae60" stroke-width="3" marker-end="url(#arrowGreen)"/>
-                    <text x="80" y="130" font-size="10" fill="#27ae60" font-weight="500">Goods &</text>
-                    <text x="80" y="142" font-size="10" fill="#27ae60" font-weight="500">services sold</text>
+                    <path class="flow-arrow" data-info="goods-sold" d="M 100 200 Q 100 70, 170 70" fill="none" stroke="#e74c3c" stroke-width="3" marker-end="url(#arrowRed)"/>
+                    <text x="115" y="115" font-size="9" fill="#e74c3c" font-weight="500">Goods</text>
+                    <text x="115" y="126" font-size="9" fill="#e74c3c" font-weight="500">and services</text>
+                    <text x="115" y="137" font-size="9" fill="#e74c3c" font-weight="500">sold</text>
 
                     <!-- Top right: Goods bought (Market to Households) -->
-                    <path class="flow-arrow" data-info="goods-bought" d="M 430 70 Q 500 70, 500 200" fill="none" stroke="#27ae60" stroke-width="3" marker-end="url(#arrowGreen)"/>
-                    <text x="475" y="130" font-size="10" fill="#27ae60" font-weight="500">Goods &</text>
-                    <text x="475" y="142" font-size="10" fill="#27ae60" font-weight="500">services bought</text>
+                    <path class="flow-arrow" data-info="goods-bought" d="M 430 70 Q 500 70, 500 200" fill="none" stroke="#e74c3c" stroke-width="3" marker-end="url(#arrowRed)"/>
+                    <text x="510" y="115" font-size="9" fill="#e74c3c" font-weight="500">Goods</text>
+                    <text x="510" y="126" font-size="9" fill="#e74c3c" font-weight="500">and services</text>
+                    <text x="510" y="137" font-size="9" fill="#e74c3c" font-weight="500">bought</text>
 
                     <!-- Bottom right: Labor/Land/Capital (Households to Factor Market) -->
-                    <path class="flow-arrow" data-info="factors-sold" d="M 500 300 Q 500 430, 430 430" fill="none" stroke="#27ae60" stroke-width="3" marker-end="url(#arrowGreen)"/>
-                    <text x="480" y="370" font-size="10" fill="#27ae60" font-weight="500">Labor, land,</text>
-                    <text x="480" y="382" font-size="10" fill="#27ae60" font-weight="500">& capital</text>
+                    <path class="flow-arrow" data-info="factors-sold" d="M 500 300 Q 500 430, 430 430" fill="none" stroke="#e74c3c" stroke-width="3" marker-end="url(#arrowRed)"/>
+                    <text x="510" y="355" font-size="9" fill="#e74c3c" font-weight="500">Labor, land,</text>
+                    <text x="510" y="366" font-size="9" fill="#e74c3c" font-weight="500">and capital</text>
 
                     <!-- Bottom left: Factors bought (Factor Market to Firms) -->
-                    <path class="flow-arrow" data-info="factors-bought" d="M 170 430 Q 100 430, 100 300" fill="none" stroke="#27ae60" stroke-width="3" marker-end="url(#arrowGreen)"/>
-                    <text x="55" y="370" font-size="10" fill="#27ae60" font-weight="500">Factors of</text>
-                    <text x="55" y="382" font-size="10" fill="#27ae60" font-weight="500">production</text>
+                    <path class="flow-arrow" data-info="factors-bought" d="M 170 430 Q 100 430, 100 300" fill="none" stroke="#e74c3c" stroke-width="3" marker-end="url(#arrowRed)"/>
+                    <text x="35" y="355" font-size="9" fill="#e74c3c" font-weight="500">Factors of</text>
+                    <text x="35" y="366" font-size="9" fill="#e74c3c" font-weight="500">production</text>
 
-                    <!-- INNER FLOWS (Red - Money flows) -->
+                    <!-- INNER FLOWS (Green - Money flows) -->
                     <!-- Top left: Revenue (Market to Firms) -->
-                    <path class="flow-arrow" data-info="revenue" d="M 170 50 Q 80 50, 80 200" fill="none" stroke="#e74c3c" stroke-width="3" marker-end="url(#arrowRed)"/>
-                    <text x="100" y="40" font-size="10" fill="#e74c3c" font-weight="500">Revenue</text>
+                    <path class="flow-arrow" data-info="revenue" d="M 170 50 Q 80 50, 80 200" fill="none" stroke="#27ae60" stroke-width="3" marker-end="url(#arrowGreen)"/>
+                    <text x="125" y="30" font-size="10" fill="#27ae60" font-weight="500">Revenue</text>
 
                     <!-- Top right: Spending (Households to Market) -->
-                    <path class="flow-arrow" data-info="spending" d="M 520 200 Q 520 50, 430 50" fill="none" stroke="#e74c3c" stroke-width="3" marker-end="url(#arrowRed)"/>
-                    <text x="480" y="40" font-size="10" fill="#e74c3c" font-weight="500">Spending</text>
+                    <path class="flow-arrow" data-info="spending" d="M 520 200 Q 520 50, 430 50" fill="none" stroke="#27ae60" stroke-width="3" marker-end="url(#arrowGreen)"/>
+                    <text x="465" y="30" font-size="10" fill="#27ae60" font-weight="500">Spending</text>
 
                     <!-- Bottom right: Income (Factor Market to Households) -->
-                    <path class="flow-arrow" data-info="income" d="M 430 450 Q 520 450, 520 300" fill="none" stroke="#e74c3c" stroke-width="3" marker-end="url(#arrowRed)"/>
-                    <text x="480" y="465" font-size="10" fill="#e74c3c" font-weight="500">Income</text>
+                    <path class="flow-arrow" data-info="income" d="M 430 450 Q 520 450, 520 300" fill="none" stroke="#27ae60" stroke-width="3" marker-end="url(#arrowGreen)"/>
+                    <text x="470" y="475" font-size="10" fill="#27ae60" font-weight="500">Income</text>
 
                     <!-- Bottom left: Wages/Rent/Profit (Firms to Factor Market) -->
-                    <path class="flow-arrow" data-info="wages" d="M 80 300 Q 80 450, 170 450" fill="none" stroke="#e74c3c" stroke-width="3" marker-end="url(#arrowRed)"/>
-                    <text x="40" y="465" font-size="10" fill="#e74c3c" font-weight="500">Wages, rent,</text>
-                    <text x="40" y="477" font-size="10" fill="#e74c3c" font-weight="500">& profit</text>
+                    <path class="flow-arrow" data-info="wages" d="M 80 300 Q 80 450, 170 450" fill="none" stroke="#27ae60" stroke-width="3" marker-end="url(#arrowGreen)"/>
+                    <text x="35" y="470" font-size="9" fill="#27ae60" font-weight="500">Wages, rent,</text>
+                    <text x="35" y="481" font-size="9" fill="#27ae60" font-weight="500">and profit</text>
                 </svg>
             </div>
 
             <div class="legend">
                 <div class="legend-item">
                     <div class="legend-color" style="background: #27ae60;"></div>
-                    <span>Flow of goods, services, & factors</span>
+                    <span>Flow of money</span>
                 </div>
                 <div class="legend-item">
                     <div class="legend-color" style="background: #e74c3c;"></div>
-                    <span>Flow of money</span>
+                    <span>Flow of goods, services, & factors</span>
                 </div>
             </div>
 
