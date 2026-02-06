@@ -295,6 +295,32 @@
             line-height: 1.5;
         }
 
+        .opportunity-cost-box {
+            background: #f3e8fd;
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 20px;
+            border: 2px solid #9b59b6;
+        }
+
+        .opportunity-cost-box h4 {
+            color: #8e44ad;
+            margin-bottom: 8px;
+        }
+
+        .opportunity-cost-box .oc-value {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 8px;
+        }
+
+        .opportunity-cost-box .oc-explanation {
+            font-size: 0.85rem;
+            color: #555;
+            line-height: 1.5;
+        }
+
         .concept-box {
             background: #e8f4fd;
             border-radius: 8px;
@@ -455,6 +481,12 @@
                     <div class="point-status" id="pointStatus">
                         <h4>Current Point</h4>
                         <p>Adjust the sliders to explore different production combinations.</p>
+                    </div>
+
+                    <div class="opportunity-cost-box" id="opportunityCost">
+                        <h4>Opportunity Cost</h4>
+                        <p class="oc-value"></p>
+                        <p class="oc-explanation"></p>
                     </div>
 
                     <div class="concept-box">
@@ -771,6 +803,46 @@
 
             pointStatus.className = 'point-status ' + statusClass;
             pointStatus.innerHTML = `<h4>${title}</h4><p>${description}</p>`;
+
+            // Update opportunity cost display
+            updateOpportunityCost(wine);
+        }
+
+        function updateOpportunityCost(wine) {
+            const ocBox = document.getElementById('opportunityCost');
+            const ocValueEl = ocBox.querySelector('.oc-value');
+            const ocExplanationEl = ocBox.querySelector('.oc-explanation');
+
+            // Opportunity cost of wine = |d(cheese)/d(wine)| = wine / sqrt(10000 - wine²)
+            // This is the slope of the PPF at the current point
+            let ocValue, ocExplanation;
+
+            if (wine === 0) {
+                ocValue = "0 wheels of cheese per barrel of wine";
+                ocExplanation = "At zero wine production, the opportunity cost is essentially zero. The first barrels of wine are almost free in terms of cheese given up—you're picking the low-hanging fruit!";
+            } else if (wine >= 99) {
+                ocValue = "Very high! (approaching ∞)";
+                ocExplanation = "At maximum wine production, the opportunity cost is extremely high. Each additional barrel of wine requires sacrificing enormous amounts of cheese. You've already picked all the low-hanging fruit!";
+            } else {
+                const denominator = Math.sqrt(10000 - wine * wine);
+                const oc = wine / denominator;
+                ocValue = `${oc.toFixed(2)} wheels of cheese per barrel of wine`;
+
+                if (oc < 0.2) {
+                    ocExplanation = `Low opportunity cost! At ${wine} barrels of wine, you're still picking the low-hanging fruit. Each additional barrel of wine only costs about ${oc.toFixed(2)} wheels of cheese.`;
+                } else if (oc < 0.5) {
+                    ocExplanation = `Moderate opportunity cost. At ${wine} barrels of wine, each additional barrel now costs ${oc.toFixed(2)} wheels of cheese. The easy gains are behind you.`;
+                } else if (oc < 1) {
+                    ocExplanation = `Getting expensive! At ${wine} barrels of wine, each additional barrel costs ${oc.toFixed(2)} wheels of cheese. Trade-offs are becoming significant.`;
+                } else if (oc < 3) {
+                    ocExplanation = `High opportunity cost. At ${wine} barrels of wine, you must give up ${oc.toFixed(2)} wheels of cheese for each additional barrel. Resources are being stretched thin.`;
+                } else {
+                    ocExplanation = `Very high opportunity cost! At ${wine} barrels of wine, each additional barrel costs a whopping ${oc.toFixed(2)} wheels of cheese. Is that extra wine really worth it?`;
+                }
+            }
+
+            ocValueEl.innerHTML = ocValue;
+            ocExplanationEl.innerHTML = ocExplanation;
         }
 
         wineSlider.addEventListener('input', () => {
@@ -781,6 +853,118 @@
         cheeseSlider.addEventListener('input', () => {
             cheeseValue.textContent = cheeseSlider.value;
             drawPPF();
+        });
+
+        // Draggable dot functionality
+        let isDragging = false;
+        const padding = 50;
+
+        function getCanvasCoords(e) {
+            const rect = canvas.getBoundingClientRect();
+            const scaleX = canvas.width / rect.width;
+            const scaleY = canvas.height / rect.height;
+
+            let clientX, clientY;
+            if (e.touches) {
+                clientX = e.touches[0].clientX;
+                clientY = e.touches[0].clientY;
+            } else {
+                clientX = e.clientX;
+                clientY = e.clientY;
+            }
+
+            return {
+                x: (clientX - rect.left) * scaleX,
+                y: (clientY - rect.top) * scaleY
+            };
+        }
+
+        function canvasToValues(canvasX, canvasY) {
+            const graphWidth = canvas.width - padding * 2;
+            const graphHeight = canvas.height - padding * 2;
+
+            const wine = Math.round(((canvasX - padding) / graphWidth) * 100);
+            const cheese = Math.round(((canvas.height - padding - canvasY) / graphHeight) * 100);
+
+            return {
+                wine: Math.max(0, Math.min(100, wine)),
+                cheese: Math.max(0, Math.min(100, cheese))
+            };
+        }
+
+        function isNearDot(canvasX, canvasY) {
+            const graphWidth = canvas.width - padding * 2;
+            const graphHeight = canvas.height - padding * 2;
+            const wine = parseInt(wineSlider.value);
+            const cheese = parseInt(cheeseSlider.value);
+
+            const dotX = padding + (wine / 100) * graphWidth;
+            const dotY = canvas.height - padding - (cheese / 100) * graphHeight;
+
+            const distance = Math.sqrt((canvasX - dotX) ** 2 + (canvasY - dotY) ** 2);
+            return distance < 20; // 20px hit radius
+        }
+
+        function updateSlidersFromDrag(canvasX, canvasY) {
+            const values = canvasToValues(canvasX, canvasY);
+
+            wineSlider.value = values.wine;
+            cheeseSlider.value = values.cheese;
+            wineValue.textContent = values.wine;
+            cheeseValue.textContent = values.cheese;
+
+            drawPPF();
+        }
+
+        canvas.addEventListener('mousedown', (e) => {
+            const coords = getCanvasCoords(e);
+            if (isNearDot(coords.x, coords.y)) {
+                isDragging = true;
+                canvas.style.cursor = 'grabbing';
+                e.preventDefault();
+            }
+        });
+
+        canvas.addEventListener('mousemove', (e) => {
+            const coords = getCanvasCoords(e);
+
+            if (isDragging) {
+                updateSlidersFromDrag(coords.x, coords.y);
+            } else {
+                // Update cursor on hover
+                canvas.style.cursor = isNearDot(coords.x, coords.y) ? 'grab' : 'default';
+            }
+        });
+
+        canvas.addEventListener('mouseup', () => {
+            isDragging = false;
+            canvas.style.cursor = 'default';
+        });
+
+        canvas.addEventListener('mouseleave', () => {
+            isDragging = false;
+            canvas.style.cursor = 'default';
+        });
+
+        // Touch support
+        canvas.addEventListener('touchstart', (e) => {
+            const coords = getCanvasCoords(e);
+            if (isNearDot(coords.x, coords.y)) {
+                isDragging = true;
+                e.preventDefault();
+            }
+        }, { passive: false });
+
+        canvas.addEventListener('touchmove', (e) => {
+            if (isDragging) {
+                const coords = getCanvasCoords(e);
+                updateSlidersFromDrag(coords.x, coords.y);
+                e.preventDefault();
+            }
+        }, { passive: false });
+
+        canvas.addEventListener('touchend', () => {
+            isDragging = false;
         });
 
         // Initial draw
